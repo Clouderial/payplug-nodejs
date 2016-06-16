@@ -1,0 +1,43 @@
+{
+    "appenders": [
+        {
+            "category": [ "testu", "ppnjs", "jmcnet" ],
+            "type": "dateFile",
+            "filename": "../logs/payplug-nodejs.log",
+            "pattern": "-yyyy-MM-dd",
+            "maxLogSize": 20480,
+            "backups": 3
+        },
+        { 
+            "category": [ "ppnjs", "jmcnet" ], 
+            "type": "logLevelFilter",
+            "level": "ERROR",
+            "appender": {
+                "type": "file",
+                "filename": "../logs/payplug-nodejs-errors.log", 
+                "layout": { 
+                    "type": "messagePassThrough" 
+                } 
+            }
+        },
+        {
+            "category": [ "testu" ],
+            "type": "dateFile",
+            "filename": "../logs/testu.log",
+            "pattern": "-yyyy-MM-dd",
+            "maxLogSize": 20480,
+            "backups": 3
+        },
+        {
+            "type": "console",
+            "category": "console"          
+        }
+    ],
+
+    "levels" : {
+        "jmcnet": "INFO",
+        "ppnjs": "INFO",
+        "testu" : "TRACE",
+        "testi" : "TRACE"
+    }
+}
