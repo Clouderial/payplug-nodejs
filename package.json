@@ -23,6 +23,7 @@
     "test": "node node_modules/gulp/bin/gulp testu"
   },
   "dependencies": {
+    "jmcnet": "^1.6.0",
     "lodash": "^4.13.1",
     "lodash.pluck": "^3.1.2",
     "log4js": "^0.6.37",

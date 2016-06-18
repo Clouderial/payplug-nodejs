@@ -14,26 +14,62 @@
  */
 var expect = require('chai').expect; // jshint ignore:line
 var log = require('log4js').getLogger('testu'),
-//    _ = require('lodash'),
+    jmcnetException = require('jmcnet').exception,
+    //    _ = require('lodash'),
     PayPlugAPI = require('lib/payplug-nodejs.js').PayPlugAPI;
 
 // The tests
 describe('<PlayPlug API Unit Test>', function () {
     var payplugapi;
     before(function (done) {
-        payplugapi = new PayPlugAPI();
         done();
     });
+    
+    it('Should be not possible to instanciate PayPlugAPI without secretKey', function(done){
+        try { 
+            payplugapi = new PayPlugAPI();
+            done('we should not be there');
+        }
+        catch(err) {
+            expect(err).to.be.instanceof(jmcnetException.TechnicalException);
+            done();
+        }
+    });
 
-    it('Should be possible to authenticate', function (done) {
-        log.debug('--> Testing "Should be possible to authenticate"');
+    it('Should be possible to instanciate PayPlugAPI with a wrong secretKey and no options', function(done){
+        try { 
+            payplugapi = new PayPlugAPI('wrongSecretKey');
+            expect(payplugapi.getPayPlugURL()).to.equal(PayPlugAPI.DEFAULT_PAYPLUG_URL);
+            done();
+        }
+        catch(err) {
+            expect(err).to.be.instanceof(jmcnetException.TechnicalException);
+            done('we should not be there');
+        }
+    });
+
+    it('Should be possible to instanciate PayPlugAPI with a wrong secretKey and a default URL in options', function(done){
+        try { 
+            payplugapi = new PayPlugAPI('wrongSecretKey', { payplugUrl : 'http://a.fake.url'});
+            expect(payplugapi.getPayPlugURL()).to.equal('http://a.fake.url/');
+            done();
+        }
+        catch(err) {
+            expect(err).to.be.instanceof(jmcnetException.TechnicalException);
+            done('we should not be there');
+        }
+    });
+
+    it('Should be not possible to authenticate without secretKey', function (done) {
+        log.debug('--> Testing "Should be not possible to authenticate without secretKey"');
         payplugapi.authenticate()
             .then(function (result) {
-                expect(result).to.exist;
-                log.debug('<-- EndOf "Should be possible to authenticate"');
+                done('should not be there');
+            })
+            .fail(function (err) {
+                log.debug('<-- EndOf "Should not possible to authenticate without secretKey"');
                 done();
             })
-            .fail(done)
             .done();
     });
 });

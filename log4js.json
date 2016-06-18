@@ -37,6 +37,7 @@
     "levels" : {
         "jmcnet": "INFO",
         "ppnjs": "INFO",
+        "ppnjs.PayPlugAPI": "TRACE",
         "testu" : "TRACE",
         "testi" : "TRACE"
     }
