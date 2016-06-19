@@ -56,15 +56,15 @@ gulp.task('env-test', function () {
 });
 
 gulp.task('watchTestu', function () {
-    gulp.watch(_.union(paths.jsServer, paths.jsTestuPkg), ['jshintTestu', 'mochaTestu']);
+    gulp.watch(_.union(paths.lib, paths.jsTestuPkg), ['jshintTestu', 'mochaTestu']);
 });
 
 gulp.task('watchCoverage', function () {
-    gulp.watch(_.union(paths.jsServer, paths.jsTestuPkg), ['jshintTestu', 'openCoverage']);
+    gulp.watch(_.union(paths.lib, paths.jsTestuPkg), ['jshintTestu', 'openCoverage']);
 });
 
 gulp.task('jshintServer', function(){
-    return gulp.src(paths.jsServer)
+    return gulp.src(paths.lib)
     .pipe(jshint())
     .pipe(jshint.reporter('default'))
     .pipe(jshint.reporter('fail'))
@@ -72,7 +72,7 @@ gulp.task('jshintServer', function(){
 });
 
 gulp.task('jshintTestu', function(){
-    return gulp.src(_.union(paths.jsServer, paths.jsTestuPkg))
+    return gulp.src(_.union(paths.lib, paths.jsTestuPkg))
     .pipe(jshint())
     .pipe(jshint.reporter('default'))
     .pipe(jshint.reporter('fail'))
