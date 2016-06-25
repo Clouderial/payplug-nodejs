@@ -52,6 +52,25 @@ describe('<PlayPlug API Unit Test>', function () {
 		done();
 	});
 
+	it('Should be not possible to authenticate with a wrong secretKey against real URL', function (done) {
+		log.debug('--> Testing "Should be not possible to authenticate with a wrong secretKey against real URL"');
+		payplugapi = new PayPlugAPI('aWrongSecretKey');
+		payplugapi.authenticate()
+			.then(function (result) {
+				done('Should not be there');
+			})
+			.fail(function(err){
+                expect(err).to.be.instanceof(jmcnetException.FunctionalException);
+                expect(err.message).to.equal(401);
+                expect(err.parameters[0]).to.equal('Unauthorized');
+                expect(err.parameters[1]).to.equal('GET /v1/payments');
+                expect(payplugapi.authenticated).to.be.false;
+				log.debug('<-- EndOf "Should be possible to authenticate with a real secretKey"');
+                done();
+        })
+			.done();
+	});
+    
 	/*
 	 * For this test to work you must supply a configuration properties file on tests/config.json
 	 */ 
@@ -60,10 +79,12 @@ describe('<PlayPlug API Unit Test>', function () {
 		payplugapi = new PayPlugAPI(config.testSecretKey);
 		payplugapi.authenticate()
 			.then(function (result) {
+                expect(payplugapi.authenticated).to.be.true;
 				log.debug('<-- EndOf "Should be possible to authenticate with a real secretKey"');
 				done();
 			})
 			.fail(done)
 			.done();
 	});
+    
 });
