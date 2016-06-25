@@ -42,7 +42,7 @@ To launch the test you must first provide a tests/config.json file with you secr
 
 <pre>
 {
-  "testSecretKey": "sk_test_POUIZEHXIUEHD987H4D9U7H98"
+  "testSecretKey": "sk_test_751BVqbli82hx9hyL5GRGT"
 }
 </pre>
 
