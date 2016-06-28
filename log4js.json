@@ -38,6 +38,7 @@
         "jmcnet": "INFO",
         "ppnjs": "INFO",
         "ppnjs.PayPlugAPI": "TRACE",
+        "ppnjs.Payment": "TRACE",
         "testu" : "TRACE",
         "testi" : "TRACE"
     }
