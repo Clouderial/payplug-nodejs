@@ -81,17 +81,19 @@ payment.sendCreate()
 
 ### To retrieve a payment :
 
+Call this method a retrieve an existing Payment from its id
+
 <pre>
 // Cf above to have an authenticated PayplugApi object
 // var payplugapi = new PayPlugAPI('mySecretKey');
 // payplugapi.authenticate()
 // ... 
 
-// Retrieve a Payment wth its Id
+// Retrieve a Payment with its Id
 Payment.retrieve(payplugapi, 'theIDOfPayment')
     .then(function (payment) {
         // The API call is successfull
-        // payment if Payment updated with id and tracker;
+        // payment updated with id and tracker;
         payment.getId();
         payment.getTracker();
         
@@ -100,6 +102,35 @@ Payment.retrieve(payplugapi, 'theIDOfPayment')
             newPayment.payment.failure.code;
             newPayment.payment.failure.message;
         }
+    })
+    .fail(function(err){
+        // there have been an error during payment creation
+        err.message;
+    })
+    .done();
+</pre>
+
+### To abort a payment :
+
+Call this method a abort an existing Payment. Payment should have been send before or retrieved with list or retrieve
+
+<pre>
+// Cf above to have an authenticated PayplugApi object
+// var payplugapi = new PayPlugAPI('mySecretKey');
+// payplugapi.authenticate()
+// ... 
+// Cf. above to retrieve a Payment
+// Payment.retrieve(payplugapi, 'theIDOfPayment')...
+// Payment.list(payplugapi)...
+
+// Abort a Payment with its Id
+payemnt.sendAbort()
+    .then(function (payment) {
+        // The API call is successfull
+        payment.getId();
+        payment.getTracker();
+        newPayment.payment.failure.code;
+        newPayment.payment.failure.message;
     })
     .fail(function(err){
         // there have been an error during payment creation
