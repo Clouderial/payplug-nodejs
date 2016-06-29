@@ -8,7 +8,7 @@ It is used as payment solution of the StartUp Clouderial (<a href="http://cloude
 ## Install
 <code>$ npm install payplug-nodejs</code>
 
-## Authenticate again PayPlug API
+## Authenticate against PayPlug API
 To authenticate :
 
 <pre>
@@ -36,6 +36,78 @@ if (payplugapi.authenticated) {
 	// The API is successfully authenticated
 }
 </pre>
+
+## Payment
+### To create a payment :
+
+<pre>
+// Cf above to have an authenticated PayplugApi object
+// var payplugapi = new PayPlugAPI('mySecretKey');
+// payplugapi.authenticate()
+// ... 
+
+// Create a new Payment
+payment = new Payment(payplugapi, 'paymentid', {
+    'amount': 1000,
+    'currency': 'EUR',
+    'customer': {
+        'email': 'testu@payplug-nodejs.com',
+        'first_name': 'ClientFirstname',
+        'last_name': 'ClientLastname'
+    },
+    'save_card': false,
+    'force_3ds': true
+});
+
+// Send the Payment creation
+payment.sendCreate()
+    .then(function (newPayment) {
+        // The API call is successfull
+        // newPayment if Payment updated with id and tracker;
+        newPayment.getId();
+        newPayment.getTracker();
+        // if payment
+        if (newPayemnt.isFailed()) {
+            newPayment.payment.failure.code;
+            newPayment.payment.failure.message;
+        }
+    })
+    .fail(function(err){
+        // there have been an error during payment creation
+        err.message;
+    })
+    .done();
+</pre>
+
+### To retrieve a payment :
+
+<pre>
+// Cf above to have an authenticated PayplugApi object
+// var payplugapi = new PayPlugAPI('mySecretKey');
+// payplugapi.authenticate()
+// ... 
+
+// Retrieve a Payment wth its Id
+Payment.retrieve(payplugapi, 'theIDOfPayment')
+    .then(function (payment) {
+        // The API call is successfull
+        // payment if Payment updated with id and tracker;
+        payment.getId();
+        payment.getTracker();
+        
+        // if payment is aborted of failed
+        if (newPayemnt.isFailed()) {
+            newPayment.payment.failure.code;
+            newPayment.payment.failure.message;
+        }
+    })
+    .fail(function(err){
+        // there have been an error during payment creation
+        err.message;
+    })
+    .done();
+</pre>
+
 
 ## Tests
 To launch the test you must first provide a tests/config.json file with you secret key. Example :

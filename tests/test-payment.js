@@ -17,6 +17,7 @@ var log = require('log4js').getLogger('testu'),
     jmcnet = require('jmcnet'),
     jmcnetException = jmcnet.exception,
     _ = require('lodash'),
+    Q = require('q'),
     ppnj = require('lib/payplug-nodejs.js'),
     PayPlugAPI = ppnj.PayPlugAPI,
     ppnj_payment = require('lib/payment.js'),
@@ -24,7 +25,7 @@ var log = require('log4js').getLogger('testu'),
     config = require('tests/config.json');
 
 // The tests
-describe.only('<PlayPlug Paymnt API Unit Test>', function () {
+describe('<PlayPlug Paymnt API Unit Test>', function () {
     var payplugapi;
     before(function () {
         log.debug('--> Testing "Payment.beforeAll"');
@@ -33,6 +34,7 @@ describe.only('<PlayPlug Paymnt API Unit Test>', function () {
             cancelReturnUrl: 'https://example.net/payplugapi/test/cancel?tracker=',
             notificationUrl: 'https://example.net/payplugapi/test/notifications?tracker=',
         });
+
         log.debug('<-- EndOf "Payment.beforeAll"');
     });
 
@@ -93,7 +95,8 @@ describe.only('<PlayPlug Paymnt API Unit Test>', function () {
         });
         payment.sendCreate()
             .then(function (p) {
-                expect(p.payment.metadata.paymentTracker).to.equal('paymentid');
+                expect(p.getTracker()).to.equal('paymentid');
+                expect(p.getId()).to.exist;
                 payment = p;
                 done();
             })
@@ -119,6 +122,7 @@ describe.only('<PlayPlug Paymnt API Unit Test>', function () {
     });
 
     it('Should be possible to retrieve the new payment', function (done) {
+        expect(payment).to.exist;
         Payment.retrieve(payplugapi, payment.getId())
             .then(function (p) {
                 expect(p.getId()).to.equal(payment.getId());
@@ -131,7 +135,8 @@ describe.only('<PlayPlug Paymnt API Unit Test>', function () {
     });
 
     it('Should be possible to abort the new payment', function (done) {
-        payment.sendAbort(payplugapi, payment.getId())
+        expect(payment).to.exist;
+        payment.sendAbort()
             .then(function (p) {
                 expect(p.getId()).to.equal(payment.getId());
                 expect(p.getTracker()).to.equal(payment.getTracker());
@@ -140,6 +145,25 @@ describe.only('<PlayPlug Paymnt API Unit Test>', function () {
                 expect(p.payment.failure.code).to.equal(ppnj_payment.PAYMENT_ABORT_STATUS);
                 expect(p.payment.failure.message).to.exist;
                 payment = p;
+                done();
+            })
+            .fail(done)
+            .done();
+    });
+
+    it('Should be possible to abort all payment created by those tests', function (done) {
+        Payment.list(payplugapi)
+            .then(function (list) {
+                var bigPromise = [];
+                _.forEach(list, function(payment) {
+                    if (!payment.isFailed()) {
+                        bigPromise.push(payment.sendAbort());
+                    }
+                });
+                return Q.all(bigPromise);
+            })
+            .then(function (res) {
+                log.debug('Number of old payments aborted: "%d"', res.length);
                 done();
             })
             .fail(done)
