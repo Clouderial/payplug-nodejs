@@ -12,7 +12,7 @@ It is used as payment solution of the StartUp Clouderial (<a href="http://cloude
 To authenticate :
 
 <pre>
-var PayPlugAPI = require('lib/payplug-nodejs.js').PayPlugAPI;
+var PayPlugAPI = require('payplug-nodejs').PayPlugAPI;
 
 var payplugapi = new PayPlugAPI('mySecretKey');
 
@@ -47,6 +47,7 @@ if (payplugapi.authenticated) {
 // ... 
 
 // Create a new Payment
+var Payment = require('payplug-nodejs').Payment;
 payment = new Payment(payplugapi, 'paymentid', {
     'amount': 1000,
     'currency': 'EUR',
