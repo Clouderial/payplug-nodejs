@@ -132,6 +132,7 @@ payemnt.sendAbort()
         payment.getTracker();
         newPayment.payment.failure.code;
         newPayment.payment.failure.message;
+        expect(newPayment.payment.failure.code).to.equal(Payment.ABORT_STATUS);
     })
     .fail(function(err){
         // there have been an error during payment creation

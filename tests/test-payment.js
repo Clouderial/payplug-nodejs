@@ -20,12 +20,11 @@ var log = require('log4js').getLogger('testu'),
     Q = require('q'),
     ppnj = require('lib/payplug-nodejs.js'),
     PayPlugAPI = ppnj.PayPlugAPI,
-    ppnj_payment = require('lib/payment.js'),
-    Payment = ppnj_payment.Payment,
+    Payment = ppnj.Payment,
     config = require('tests/config.json');
 
 // The tests
-describe('<PlayPlug Paymnt API Unit Test>', function () {
+describe('<PlayPlug Payment API Unit Test>', function () {
     var payplugapi;
     before(function () {
         log.debug('--> Testing "Payment.beforeAll"');
@@ -142,7 +141,7 @@ describe('<PlayPlug Paymnt API Unit Test>', function () {
                 expect(p.getTracker()).to.equal(payment.getTracker());
                 expect(p.payment.amount).to.equal(payment.payment.amount);
                 expect(p.payment.failure).to.exist;
-                expect(p.payment.failure.code).to.equal(ppnj_payment.PAYMENT_ABORT_STATUS);
+                expect(p.payment.failure.code).to.equal(Payment.ABORT_STATUS);
                 expect(p.payment.failure.message).to.exist;
                 payment = p;
                 done();
