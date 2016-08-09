@@ -14,7 +14,16 @@ To authenticate :
 <pre>
 var PayPlugAPI = require('payplug-nodejs').PayPlugAPI;
 
-var payplugapi = new PayPlugAPI('mySecretKey');
+var payplugapi = new PayPlugAPI('mySecretKey', {
+    // the url called in case of success
+    sucessReturnUrl: 'https://[my-url]/payplugapi/test/success?tracker=',
+    
+    // the url called in case of cancelation
+    cancelReturnUrl: 'https://[my-url]/payplugapi/test/cancel?tracker=',
+    
+    // the notification url. Cf. https://www.payplug.com/docs/api/apiref.html#notifications
+    notificationUrl: 'https://[my-url]/payplugapi/test/notifications?tracker='
+});
 
 payplugapi.authenticate()
 	.then(function (result) {

@@ -63,7 +63,7 @@ describe('<PlayPlug API Unit Test>', function () {
                 expect(err).to.be.instanceof(jmcnetException.FunctionalException);
                 expect(err.message).to.equal(401);
                 expect(err.parameters[0]).to.equal('Unauthorized');
-                expect(err.parameters[1]).to.equal('GET /v1/payments');
+                expect(err.parameters[1]).to.equal('GET /v1/payments?page=1&per_page=1');
                 expect(payplugapi.authenticated).to.be.false;
 				log.debug('<-- EndOf "Should be possible to authenticate with a real secretKey"');
                 done();
