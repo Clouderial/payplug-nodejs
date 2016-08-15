@@ -71,15 +71,16 @@ payment = new Payment(payplugapi, 'paymentid', {
 
 // Send the Payment creation
 payment.sendCreate()
-    .then(function (newPayment) {
+    .then(function (newPaymentResult) {
         // The API call is successfull
-        // newPayment if Payment updated with id and tracker;
-        newPayment.getId();
-        newPayment.getTracker();
+        // newPaymentResult.payment is Payment updated with id and tracker;
+        newPaymentResult.getId();
+        newPaymentResult.getTracker();
+        newPaymentResult.getPaymentUrl();
         // if payment
-        if (newPayemnt.isFailed()) {
-            newPayment.payment.failure.code;
-            newPayment.payment.failure.message;
+        if (newPaymentResult.isFailed()) {
+            newPaymentResult.getFailure().code;
+            newPaymentResult.getFailure().message;
         }
     })
     .fail(function(err){
@@ -109,8 +110,8 @@ Payment.retrieve(payplugapi, 'theIDOfPayment')
         
         // if payment is aborted of failed
         if (newPayemnt.isFailed()) {
-            newPayment.payment.failure.code;
-            newPayment.payment.failure.message;
+            newPayment.getFailure().code;
+            newPayment.getFailure().message;
         }
     })
     .fail(function(err){
@@ -139,15 +140,33 @@ payemnt.sendAbort()
         // The API call is successfull
         payment.getId();
         payment.getTracker();
-        newPayment.payment.failure.code;
-        newPayment.payment.failure.message;
-        expect(newPayment.payment.failure.code).to.equal(Payment.ABORT_STATUS);
+        
+        payment.getFailure().code;
+        payment.getFailure().message;
+        
+        expect(newPayment.getFailure().code).to.equal(Payment.ABORT_STATUS);
     })
     .fail(function(err){
         // there have been an error during payment creation
         err.message;
     })
     .done();
+</pre>
+
+### To get a Payment from a Payplug payment (found in notification_url for example)
+
+<pre>
+    function notificationUrl (req, res, next) {
+        ...
+        var payment = Payment.fromPayplugPayment(req.body);
+        ...
+        payment.getId();
+        payment.getTracker();
+
+        payment.isFailed();
+        payment.getFailure().code;
+        payment.getFailure().message;
+    }
 </pre>
 
 
