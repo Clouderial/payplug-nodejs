@@ -2,7 +2,7 @@
   "name": "payplug-nodejs",
   "main": "./lib/payplug-nodejs.js",
   "description": "Payplug API for NodeJS",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "private": false,
   "author": "JM. COLLIN <jm.collin@clouderial.com>",
   "contributors": [

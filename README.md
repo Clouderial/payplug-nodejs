@@ -107,6 +107,8 @@ Payment.retrieve(payplugapi, 'theIDOfPayment')
         // payment updated with id and tracker;
         payment.getId();
         payment.getTracker();
+        payment.isPayed();
+        payment.isRefunded();
         
         // if payment is aborted of failed
         if (newPayemnt.isFailed()) {
@@ -164,6 +166,8 @@ payemnt.sendAbort()
         payment.getTracker();
 
         payment.isFailed();
+        payment.isPayed();
+        payment.isRefunded();
         payment.getFailure().code;
         payment.getFailure().message;
     }
