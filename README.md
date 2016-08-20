@@ -77,7 +77,9 @@ payment.sendCreate()
         newPaymentResult.getId();
         newPaymentResult.getTracker();
         newPaymentResult.getPaymentUrl();
-        // if payment
+        newPaymentResult.getPayplugPayment(); // get the original Payplug payment (as defined in Payplug API)
+        
+        // if payment OK
         if (newPaymentResult.isFailed()) {
             newPaymentResult.getFailure().code;
             newPaymentResult.getFailure().message;
@@ -109,6 +111,8 @@ Payment.retrieve(payplugapi, 'theIDOfPayment')
         payment.getTracker();
         payment.isPayed();
         payment.isRefunded();
+        
+        payment.getPayplugPayment(); // get the original Payplug payment (as defined in Payplug API)
         
         // if payment is aborted of failed
         if (newPayemnt.isFailed()) {
@@ -142,6 +146,8 @@ payemnt.sendAbort()
         // The API call is successfull
         payment.getId();
         payment.getTracker();
+
+        payment.getPayplugPayment(); // get the original Payplug payment (as defined in Payplug API)
         
         payment.getFailure().code;
         payment.getFailure().message;
@@ -164,6 +170,8 @@ payemnt.sendAbort()
         ...
         payment.getId();
         payment.getTracker();
+
+        payment.getPayplugPayment(); // get the original Payplug payment (as defined in Payplug API)
 
         payment.isFailed();
         payment.isPayed();
