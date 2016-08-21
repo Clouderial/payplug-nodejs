@@ -107,12 +107,12 @@ describe('<PlayPlug Payment API Unit Test>', function () {
 	
 	it('Should be possible to check if payed', function(){
 		var np = _.cloneDeep(payment);
-		np.getPayplugPayment().is_payed = true;
+		np.getPayplugPayment().is_paid = true;
 		expect(np.isPayed()).to.be.true;
-		np.getPayplugPayment().is_payed = false;
+		np.getPayplugPayment().is_paid = false;
 		expect(np.isPayed()).to.be.false;
-		delete np.getPayplugPayment().is_payed;
-		expect(np.getPayplugPayment().is_payed).to.not.exist;
+		delete np.getPayplugPayment().is_paid;
+		expect(np.getPayplugPayment().is_paid).to.not.exist;
 		expect(np.isPayed()).to.be.false;
 	});
 
@@ -181,7 +181,7 @@ describe('<PlayPlug Payment API Unit Test>', function () {
             .then(function (list) {
                 var bigPromise = [];
                 _.forEach(list, function(payment) {
-                    if (!payment.isFailed()) {
+                    if (!payment.isFailed() && !payment.isPayed()) {
                         bigPromise.push(payment.sendAbort());
                     }
                 });
