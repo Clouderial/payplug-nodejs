@@ -96,12 +96,36 @@ describe('<PlayPlug Payment API Unit Test>', function () {
             .then(function (p) {
                 expect(p.getTracker()).to.equal('paymentid');
                 expect(p.getId()).to.exist;
+                expect(p.isPayed()).to.be.false;
+                expect(p.isRefunded()).to.be.false;
                 payment = p;
                 done();
             })
             .fail(done)
             .done();
     });
+	
+	it('Should be possible to check if payed', function(){
+		var np = _.cloneDeep(payment);
+		np.getPayplugPayment().is_payed = true;
+		expect(np.isPayed()).to.be.true;
+		np.getPayplugPayment().is_payed = false;
+		expect(np.isPayed()).to.be.false;
+		delete np.getPayplugPayment().is_payed;
+		expect(np.getPayplugPayment().is_payed).to.not.exist;
+		expect(np.isPayed()).to.be.false;
+	});
+
+	it('Should be possible to check if refunded', function(){
+		var np = _.cloneDeep(payment);
+		np.getPayplugPayment().is_refunded = true;
+		expect(np.isRefunded()).to.be.true;
+		np.getPayplugPayment().is_refunded = false;
+		expect(np.isRefunded()).to.be.false;
+		delete np.getPayplugPayment().is_refunded;
+		expect(np.getPayplugPayment().is_refunded).to.not.exist;
+		expect(np.isRefunded()).to.be.false;
+	});
 
     it('Should be possible to list the payments', function (done) {
         Payment.list(payplugapi)
@@ -113,7 +137,9 @@ describe('<PlayPlug Payment API Unit Test>', function () {
                 expect(newPayments).to.have.length(1);
                 expect(newPayments[0].getId()).to.equal(payment.getId());
                 expect(newPayments[0].getTracker()).to.equal(payment.getTracker());
-                expect(newPayments[0].payment.amount).to.equal(payment.payment.amount);
+                expect(newPayments[0].getPayplugPayment().amount).to.equal(payment.payment.amount);
+				expect(newPayments[0].isPayed()).to.be.false;
+                expect(newPayments[0].isRefunded()).to.be.false;
                 done();
             })
             .fail(done)
@@ -126,7 +152,7 @@ describe('<PlayPlug Payment API Unit Test>', function () {
             .then(function (p) {
                 expect(p.getId()).to.equal(payment.getId());
                 expect(p.getTracker()).to.equal(payment.getTracker());
-                expect(p.payment.amount).to.equal(payment.payment.amount);
+                expect(p.getPayplugPayment().amount).to.equal(payment.payment.amount);
                 done();
             })
             .fail(done)
@@ -139,7 +165,7 @@ describe('<PlayPlug Payment API Unit Test>', function () {
             .then(function (p) {
                 expect(p.getId()).to.equal(payment.getId());
                 expect(p.getTracker()).to.equal(payment.getTracker());
-                expect(p.payment.amount).to.equal(payment.payment.amount);
+                expect(p.getPayplugPayment().amount).to.equal(payment.payment.amount);
                 expect(p.payment.failure).to.exist;
                 expect(p.payment.failure.code).to.equal(Payment.ABORT_STATUS);
                 expect(p.payment.failure.message).to.exist;
